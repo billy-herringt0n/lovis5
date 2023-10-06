@@ -23,7 +23,7 @@ void main() {
     }
     // генерировать случайные значения для матрицы смежности
     for (i = 0; i < rows; i++) {
-        for (j = 0; j < rows; j++) {
+        for (j = i; j < rows; j++) {
             if (i == j) {
                 arr[i][j] = 0; // на главной диагонали нули
             }
@@ -33,14 +33,54 @@ void main() {
             }
         }
     }
+
+    printf("Матрица смежности:\n");
+    // выводить матрицу смежности на экран
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < rows; j++) {
+            printf("%-2d ", arr[i][j]);
+        }
+        printf("\n");
+    }
+    printf("Размер графа равен: %d\n", rows);
+
     int  edgeCount = 0;
     for (j = 0; j < rows; j++) {
-        for (i = j+1; i < rows; i++) {
+        for (i = j + 1; i < rows; i++) {
             if (arr[i][j] == 1) {
                 edgeCount++;
             }
-        }   
+        }
     }
+
+    int* rArr = 0;
+    rArr = (int*)malloc(rows * sizeof(int*));
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < rows; j++) {
+            if (arr[i][j] == 0) {
+                unit = unit;
+            }
+            else {
+                unit++;
+            }
+        }
+        rArr[i] = unit;
+        //printf("%d\n", rArr[i]);
+        unit = 0;
+    }
+    for (i = 0; i < rows; i++) {
+        if (rArr[i] == 1) {
+            printf("%d вершина - концевая\n", i + 1);
+        }
+        else if (rArr[i] == rows - 1) {
+            printf("%d вершина - доминирующая\n", i + 1);
+        }
+        else if (rArr[i] == 0) {
+            printf("%d вершина - изолированная\n", i + 1);
+        }
+    }
+
+    unit = edgeCount;
     incidenceMatrix = (int**)malloc(rows * sizeof(int*));
     if (incidenceMatrix == NULL) {
         printf("Не удалось выделить память!\n");
@@ -67,14 +107,8 @@ void main() {
             }
         }
     }
-    printf("Матрица смежности:\n");
-    // выводить матрицу смежности на экран
-    for (i = 0; i < rows; i++) {
-        for (j = 0; j < rows; j++) {
-            printf("%-2d ", arr[i][j]);
-        }
-        printf("\n");
-    }
+    
+
 
     // Вывод матрицы инцидентности на экран
     printf("Матрица инцидентности:\n");
@@ -83,6 +117,36 @@ void main() {
             printf("%-2d ", incidenceMatrix[i][j]);
         }
         printf("\n");
+    }
+
+    int* resultArr;
+    int p = 0;
+    resultArr = (int*)malloc(rows * sizeof(int*));
+    for (i = 0; i < rows; i++) {
+        for (j = 0; j < unit; j++) {
+            if (incidenceMatrix[i][j] == 0) {
+                p = p;
+            }
+            else {
+                p++;
+            }
+        }
+        resultArr[i] = p;
+        //   printf("%d\n", resultArr[i]);
+        p = 0;
+    }
+    printf("Размер графа равен: %d\n", rows);
+    p = 0;
+    for (i = 0; i < rows; i++) {
+        if (resultArr[i] == 1) {
+            printf("%d вершина - концевая\n", i + 1);
+        }
+        else if (resultArr[i] == rows - 1) {
+            printf("%d вершина - доминирующая\n", i + 1);
+        }
+        else if (resultArr[i] == 0) {
+            printf("%d вершина - изолированная\n", i + 1);
+        }
     }
     // Освобождение памяти
     for (i = 0; i < rows; i++) {
